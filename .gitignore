@@ -1,0 +1,60 @@
+# Zephyr build 관련 파일들
+build/
+build_*/
+.west/
+
+# 컴파일된 파일들
+*.o
+*.obj
+*.hex
+*.bin
+*.elf
+*.map
+*.lst
+*.out
+*.a
+*.so
+
+# Nordic/nRF 관련
+*.jlink
+pca*
+*.uvopt
+*.uvproj
+JLink*
+
+# CMake 관련
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# IDE 관련
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln.docstates
+Debug/
+Release/
+
+# 임시 파일들
+*~
+*.tmp
+*.bak
+*.swp
+*.log
+
+# Windows 시스템 파일
+Thumbs.db
+desktop.ini
+
+# Python 관련 (west 도구 사용시)
+__pycache__/
+*.pyc
+*.pyo
+
+# Device Tree 컴파일된 파일
+*.dtb
+
+# Kconfig 관련
+.config.old
