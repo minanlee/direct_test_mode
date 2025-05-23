@@ -4,36 +4,72 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
  */
 
+/* 커스텀 UART 핀 설정 */
+&pinctrl {
+    uart20_custom: uart20_custom {
+        group1 {
+            psels = <0x2000002>, /* TX - P0.02 */
+                   <0x1000001>; /* RX - P0.01 */
+        };
+    };
+};
+
 / {
-	chosen {
-		ncs,dtm-uart = &uart20;
-	};
+    chosen {
+        ncs,dtm-uart = &uart20;
+    };
+    
+    /* DTM 상태 표시용 LED 추가 */
+    dtm_leds {
+        compatible = "gpio-leds";
+        dtm_led0: dtm_led_0 {
+            gpios = <&gpio2 0x6 0x0>; /* P2.06 - LED0 */
+            label = "DTM Status LED 0";
+        };
+        dtm_led1: dtm_led_1 {
+            gpios = <&gpio2 0x9 0x0>; /* P2.09 - LED1 */
+            label = "DTM Status LED 1";
+        };
+    };
+    
+    aliases {
+        dtm-led0 = &dtm_led0;
+        dtm-led1 = &dtm_led1;
+    };
 };
 
 &uart20 {
-	status = "okay";
-	current-speed = <19200>;
+    status = "okay";
+    current-speed = <19200>;
+    /* 커스텀 핀 설정 적용 */
+    pinctrl-0 = <&uart20_custom>;
+    pinctrl-names = "default";
 };
 
 &radio {
-	status = "okay";
-	/* This is a number of antennas that are available on antenna matrix
-	 * designed by Nordic. For more information see README.rst.
-	 */
-	dfe-antenna-num = <12>;
-	/* This is a setting that enables antenna 12 (in antenna matrix designed
-	 * by Nordic) for PDU. For more information see README.rst.
-	 */
-	dfe-pdu-antenna = <0x0>;
+    status = "okay";
+    /* This is a number of antennas that are available on antenna matrix
+     * designed by Nordic. For more information see README.rst.
+     */
+    dfe-antenna-num = <12>;
+    /* This is a setting that enables antenna 12 (in antenna matrix designed
+     * by Nordic) for PDU. For more information see README.rst.
+     */
+    dfe-pdu-antenna = <0x0>;
 
-	/* These are GPIO pin numbers that are provided to
-	 * Radio peripheral. The pins will be acquired by Radio to
-	 * drive antenna switching.
-	 * Pin numbers are selected to drive switches on antenna matrix
-	 * desinged by Nordic. For more information see README.rst.
-	 */
-	dfegpio0-gpios = <&gpio0 4 0>;
-	dfegpio1-gpios = <&gpio0 5 0>;
-	dfegpio2-gpios = <&gpio0 6 0>;
-	dfegpio3-gpios = <&gpio0 7 0>;
+    /* These are GPIO pin numbers that are provided to
+     * Radio peripheral. The pins will be acquired by Radio to
+     * drive antenna switching.
+     * Pin numbers are selected to drive switches on antenna matrix
+     * desinged by Nordic. For more information see README.rst.
+     */
+    dfegpio0-gpios = <&gpio0 4 0>;
+    dfegpio1-gpios = <&gpio0 5 0>;
+    dfegpio2-gpios = <&gpio0 6 0>;
+    dfegpio3-gpios = <&gpio0 7 0>;
+};
+
+/* GPIO2 활성화 (LED 사용을 위해) */
+&gpio2 {
+    status = "okay";
 };
